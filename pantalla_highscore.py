@@ -1,46 +1,58 @@
 import pygame
+import sys
 
-def mostrar_pantalla_highscore(pantalla, puntuacion, highscore):
+# Colores
+BLANCO = (255, 255, 255)
+NEGRO = (0, 0, 0)
+
+def mostrar_pantalla_highscore(pantalla, puntuacion_actual, lista_highscores):
     """
     Objetivo:
-        Mostrar en pantalla la puntuación actual y el récord (highscore), 
-        y esperar a que el jugador presione una tecla para continuar o salir.
+        Mostrar en pantalla la lista de los 10 mejores puntajes junto con la puntuación actual.
 
     Parámetros:
-        pantalla (pygame.Surface): Superficie donde se mostrarán los textos.
-        puntuacion (int): Puntuación actual del jugador.
-        highscore (int): Mejor puntuación registrada.
+        pantalla (pygame.Surface): La superficie donde se dibujará.
+        puntuacion_actual (int): La puntuación que acaba de obtener el jugador.
+        lista_highscores (list): Lista de los 10 mejores puntajes.
 
     Salida:
-        None: La función bloquea la ejecución hasta que se presiona una tecla o se cierra la ventana.
+        None: Muestra la pantalla hasta que el jugador presione una tecla.
     """
-    NEGRO = (0, 0, 0)
-    BLANCO = (255, 255, 255)
-
-    ancho, alto = pantalla.get_size()
-    fuente = pygame.font.Font("assets/fuentes/PressStart2P.ttf", 25)
-
+    fuente = pygame.font.Font("assets/fuentes/PressStart2P.ttf", 20)
     pantalla.fill(NEGRO)
 
-    texto_titulo = fuente.render("Highscore", True, BLANCO)
-    texto_puntuacion = fuente.render(f"Tu Puntuación: {puntuacion}", True, BLANCO)
-    texto_record = fuente.render(f"Récord: {highscore}", True, BLANCO)
-    texto_instrucciones = fuente.render("Presioná cualquier tecla para salir", True, BLANCO)
+    # Título
+    texto_titulo = fuente.render("Highscores", True, BLANCO)
+    pantalla.blit(texto_titulo, (pantalla.get_width() // 2 - texto_titulo.get_width() // 2, 50))
 
-    # Centramos textos en pantalla
-    pantalla.blit(texto_titulo, (ancho // 2 - texto_titulo.get_width() // 2, alto // 4))
-    pantalla.blit(texto_puntuacion, (ancho // 2 - texto_puntuacion.get_width() // 2, alto // 4 + 60))
-    pantalla.blit(texto_record, (ancho // 2 - texto_record.get_width() // 2, alto // 4 + 120))
-    pantalla.blit(texto_instrucciones, (ancho // 2 - texto_instrucciones.get_width() // 2, alto // 4 + 200))
+    # Puntaje actual
+    texto_puntaje = fuente.render(f"Tu Puntaje: {puntuacion_actual}", True, BLANCO)
+    pantalla.blit(texto_puntaje, (pantalla.get_width() // 2 - texto_puntaje.get_width() // 2, 100))
+
+    # Highscores
+    y = 160
+    for idx, score in enumerate(lista_highscores[:10], start=1):
+        texto_score = fuente.render(f"{idx}. {score}", True, BLANCO)
+        pantalla.blit(texto_score, (pantalla.get_width() // 2 - texto_score.get_width() // 2, y))
+        y += 30
+
+    # Mensaje de continuar
+    texto_continuar = fuente.render("Presiona una tecla para continuar", True, BLANCO)
+    pantalla.blit(texto_continuar, (pantalla.get_width() // 2 - texto_continuar.get_width() // 2, y + 20))
 
     pygame.display.flip()
 
+    # Espera una tecla para volver al menú principal
     esperando = True
     while esperando:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             elif evento.type == pygame.KEYDOWN:
-                esperando = False
+                if evento.key == pygame.K_ESCAPE:
+                    return False #Vuelve al menu
+                else:
+                    return True #Continua jugando o reinicia
+                
 

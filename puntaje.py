@@ -3,55 +3,63 @@ import os
 
 ARCHIVO_HIGHSCORE = "highscore.json"
 
-def cargar_highscore():
+def cargar_highscores(filename=ARCHIVO_HIGHSCORE):
     """
     Objetivo:
-        Cargar la mejor puntuación (highscore) desde un archivo JSON.
+        Cargar la lista de highscores desde un archivo JSON.
 
     Parámetros:
-        Ninguno.
+        filename (str): Nombre del archivo de highscores. Por defecto "highscore.json".
 
     Salida:
-        int: El valor del highscore almacenado. Si no existe el archivo o está corrupto, devuelve 0.
+        list: Lista de puntajes. Si el archivo no existe o está corrupto, devuelve una lista vacía.
     """
-    if not os.path.exists(ARCHIVO_HIGHSCORE):
-        return 0
+    if not os.path.exists(filename):
+        return []
+
     try:
-        with open(ARCHIVO_HIGHSCORE, "r") as f:
+        with open(filename, "r") as f:
             data = json.load(f)
-            return data.get("highscore", 0)
+            return data.get("highscores", [])
     except (json.JSONDecodeError, IOError):
-        return 0
+        return []
 
-def guardar_highscore(puntuacion):
+def guardar_highscores(highscores, filename=ARCHIVO_HIGHSCORE):
     """
     Objetivo:
-        Guardar la mejor puntuación (highscore) en un archivo JSON.
+        Guardar la lista de highscores en un archivo JSON.
 
     Parámetros:
-        puntuacion (int): La puntuación a guardar como récord.
+        highscores (list): Lista de puntajes.
+        filename (str): Nombre del archivo donde se guardarán los datos. Por defecto "highscore.json".
 
     Salida:
-        None: Guarda el valor en el archivo, sin retorno.
+        None
     """
     try:
-        with open(ARCHIVO_HIGHSCORE, "w") as f:
-            json.dump({"highscore": puntuacion}, f)
+        with open(filename, "w") as f:
+            json.dump({"highscores": highscores}, f)
     except IOError:
         pass
 
-def calcular_velocidad_disparo(tiempo_ms):
+def actualizar_highscores(nuevo_puntaje, filename=ARCHIVO_HIGHSCORE):
     """
     Objetivo:
-        Calcular la velocidad de disparo de los enemigos en función del tiempo transcurrido en milisegundos.
+        Agregar un nuevo puntaje, ordenarlo y guardar el top 10.
 
     Parámetros:
-        tiempo_ms (int): Tiempo transcurrido en milisegundos desde el inicio del juego o nivel.
+        nuevo_puntaje (int): El nuevo puntaje a agregar.
+        filename (str): Nombre del archivo donde se guardarán los datos. Por defecto "highscore.json".
 
     Salida:
-        int: Velocidad calculada para el disparo, que aumenta cada 30 segundos.
+        list: Lista actualizada de highscores.
     """
-    velocidad_base = 5
-    incremento = (tiempo_ms // 30000)  # Cada 30 segundos aumenta 1
-    return velocidad_base + incremento
+    highscores = cargar_highscores(filename)
+    highscores.append(nuevo_puntaje)
+    highscores = sorted(highscores, reverse=True)[:10]
+    guardar_highscores(highscores, filename)
+    return highscores
+
+
+
 

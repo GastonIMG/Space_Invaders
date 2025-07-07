@@ -40,4 +40,5 @@ if __name__ == "__main__":
     unittest.main()
 
 
-###### hacemos modificaciones, lo hacemos directamenteen el main
+###### hacemos modificaciones, lo hacemos directamenteen el main o hacemos modificaciones aca cambiando a assert xq lo que tenemos ahora es de obecto
+

@@ -38,3 +38,6 @@ class TestPuntaje(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+###### hacemos modificaciones, lo hacemos directamenteen el main

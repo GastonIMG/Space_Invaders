@@ -8,11 +8,22 @@ NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 
 def pantalla_inicio(pantalla):
+    """
+    Objetivo:
+        Mostrar la pantalla de inicio con un fondo animado de estrellas, un logo que titila,
+        y esperar a que el jugador presione cualquier tecla para comenzar el juego.
+
+    Parámetros:
+        pantalla (pygame.Surface): Superficie donde se dibuja la pantalla de inicio.
+
+    Salida:
+        None: La función bloquea la ejecución hasta que se presiona una tecla o se cierra la ventana.
+        Al presionar una tecla, reproduce un sonido de inicio y realiza un efecto de desvanecimiento antes de continuar.
+    """
     reloj = pygame.time.Clock()
 
     # Crear estrellas (listas de tuplas)
     estrellas = tuple((random.randint(0, ANCHO), random.randint(0, ALTO)) for _ in range(100))
-
 
     # Cargar fuente y logo
     fuente = pygame.font.Font("assets/fuentes/PressStart2P.ttf", 20)
@@ -70,6 +81,16 @@ def pantalla_inicio(pantalla):
         reloj.tick(60)
 
 def efecto_desvanecimiento(pantalla):
+    """
+    Objetivo:
+        Realizar un efecto visual de desvanecimiento (fade out) en la pantalla, cubriéndola gradualmente con negro.
+
+    Parámetros:
+        pantalla (pygame.Surface): Superficie sobre la cual se aplica el efecto de desvanecimiento.
+
+    Salida:
+        None: La función actualiza la pantalla para mostrar el efecto visual y pausa la ejecución brevemente.
+    """
     fade = pygame.Surface((ANCHO, ALTO))
     fade.fill(NEGRO)
     for alpha in range(0, 255, 10):
@@ -77,5 +98,4 @@ def efecto_desvanecimiento(pantalla):
         pantalla.blit(fade, (0, 0))
         pygame.display.update()
         pygame.time.delay(30)
-
 

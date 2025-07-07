@@ -2,10 +2,18 @@ import pygame
 
 def mostrar_pantalla_highscore(pantalla, puntuacion, highscore):
     """
-    Muestra en pantalla la puntuación actual y el highscore.
-    Espera a que el jugador presione una tecla para continuar.
-    """
+    Objetivo:
+        Mostrar en pantalla la puntuación actual y el récord (highscore), 
+        y esperar a que el jugador presione una tecla para continuar o salir.
 
+    Parámetros:
+        pantalla (pygame.Surface): Superficie donde se mostrarán los textos.
+        puntuacion (int): Puntuación actual del jugador.
+        highscore (int): Mejor puntuación registrada.
+
+    Salida:
+        None: La función bloquea la ejecución hasta que se presiona una tecla o se cierra la ventana.
+    """
     NEGRO = (0, 0, 0)
     BLANCO = (255, 255, 255)
 
@@ -35,3 +43,4 @@ def mostrar_pantalla_highscore(pantalla, puntuacion, highscore):
                 exit()
             elif evento.type == pygame.KEYDOWN:
                 esperando = False
+

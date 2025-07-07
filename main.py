@@ -34,6 +34,18 @@ BLANCO = (255, 255, 255)
 
 # Carga de imágenes
 def cargar_imagenes_aliens():
+    """
+    Objetivo:
+        Cargar y escalar las imágenes de los aliens desde la carpeta de assets,
+        organizándolas en un diccionario por tipo y frames de animación.
+
+    Parámetros:
+        Ninguno.
+
+    Salida:
+        dict: Diccionario donde la clave es el número del alien (int) y el valor es una lista de
+              pygame.Surface con los frames de animación para ese alien.
+    """
     imagenes = {}
     for i in range(1, 5):
         frames = []
@@ -53,6 +65,16 @@ explosion_nave_img = pygame.transform.scale(pygame.image.load("assets/explosion_
 
 # Muestra el texto de nivel
 def mostrar_texto_nivel(nivel):
+    """
+    Objetivo:
+        Mostrar en pantalla el texto del nivel actual durante 2 segundos, centrado.
+
+    Parámetros:
+        nivel (int): Número del nivel a mostrar.
+
+    Salida:
+        None: Muestra el texto en pantalla y pausa la ejecución temporalmente.
+    """
     texto = fuente.render(f"Nivel {nivel}", True, BLANCO)
     pantalla.fill(NEGRO)
     pantalla.blit(texto, (ANCHO // 2 - texto.get_width() // 2, ALTO // 2))
@@ -61,6 +83,17 @@ def mostrar_texto_nivel(nivel):
 
 # Bucle principal
 def main():
+    """
+    Objetivo:
+        Ejecutar el bucle principal del juego Space Invader, controlando el flujo de niveles,
+        la interacción del jugador, la lógica de enemigos, disparos, colisiones, puntaje y sonidos.
+
+    Parámetros:
+        Ninguno.
+
+    Salida:
+        None: Ejecuta el juego hasta que el jugador cierre la ventana o termine los niveles.
+    """
     reloj = pygame.time.Clock()
     MAX_NIVELES = 5
     jugando = True
@@ -119,7 +152,8 @@ def main():
                 # Disparos del jugador
                 for d in disparos:
                     d.y -= velocidad_disparo
-                disparos = list(filter(lambda d: d.y > 0, disparos))
+                disparos = [d for d in disparos if d.y > 0]
+
 
                 # Disparos del enemigo
                 for de in disparos_enemigos:
@@ -208,6 +242,19 @@ def main():
 
 # Muestra la animación de explosión final antes de game over
 def mostrar_animacion_y_gameover(enemigos, disparos, disparos_enemigos, explosiones):
+    """
+    Objetivo:
+        Mostrar en pantalla la animación de explosiones y elementos activos antes de la pantalla de Game Over.
+
+    Parámetros:
+        enemigos (list): Lista de enemigos activos en pantalla.
+        disparos (list): Lista de disparos activos del jugador.
+        disparos_enemigos (list): Lista de disparos activos de los enemigos.
+        explosiones (list): Lista de tuplas con imágenes y posiciones para animar explosiones.
+
+    Salida:
+        None: Dibuja la animación en pantalla y detiene la ejecución momentáneamente.
+    """
     pantalla.fill(NEGRO)
     for enemigo in enemigos:
         dibujar_enemigo(pantalla, enemigo)

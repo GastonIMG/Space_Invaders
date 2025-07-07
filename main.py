@@ -86,10 +86,10 @@ def mostrar_animacion_y_gameover(enemigos, disparos, disparos_enemigos, explosio
         Mostrar en pantalla la animación de explosiones y elementos activos antes de la pantalla de Game Over.
 
     Parámetros:
-        enemigos (list): Lista de enemigos activos.
-        disparos (list): Lista de disparos del jugador.
-        disparos_enemigos (list): Lista de disparos enemigos.
-        explosiones (list): Lista de animaciones de explosión.
+        enemigos (lista): Lista de enemigos activos.
+        disparos (lista): Lista de disparos del jugador.
+        disparos_enemigos (lista): Lista de disparos enemigos.
+        explosiones (lista): Lista de animaciones de explosión.
 
     Salida:
         None.
@@ -104,7 +104,7 @@ def mostrar_animacion_y_gameover(enemigos, disparos, disparos_enemigos, explosio
     for img, centro, _ in explosiones:
         pantalla.blit(img, img.get_rect(center=centro))
     pygame.display.flip()
-    pygame.time.delay(2000)
+    pygame.time.delay(1000)
 
 
 def jugar_nivel(nivel_actual, highscore, puntuacion):
@@ -161,16 +161,22 @@ def jugar_nivel(nivel_actual, highscore, puntuacion):
             d.y -= velocidad_disparo
         disparos = [d for d in disparos if d.y > 0]
 
-        #Movimiento de los disparos del enemigo
+        # Movimiento de los disparos del enemigo
         for de in disparos_enemigos:
             de.y += 5
         disparos_enemigos = [d for d in disparos_enemigos if d.y < ALTO]
 
-        # Disparo de un enemigo aleatorio
-        if random.randint(0, 100) < 2 and grupo_enemigos:
+        if grupo_enemigos:
+            # 1) Ordenamos enemigos por posición X (horizontal)
             grupo_enemigos.sort(key=lambda e: e["rect"].x)
-            atacante = random.choice(grupo_enemigos)
-            disparos_enemigos.append(disparo_enemigo(atacante))
+
+            # 2) Filtramos a los enemigos vivos de los que ya fueron eliminados 
+            enemigos_vivos = list(filter(lambda e: e.get("vida", 1) > 0, grupo_enemigos))
+
+            # Disparo enemigo aleatorio entre enemigos vivos
+            if random.randint(0, 100) < 2 and enemigos_vivos:
+                atacante = random.choice(enemigos_vivos)
+                disparos_enemigos.append(disparo_enemigo(atacante))
 
         # Colisiones de disparo entre jugador-enemigo
         for d in disparos[:]:
